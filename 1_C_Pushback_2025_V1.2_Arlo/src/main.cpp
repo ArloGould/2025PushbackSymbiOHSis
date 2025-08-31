@@ -39,12 +39,16 @@ bool side = false;
 /*---------------------------------------------------------------------------*/
 void autonselector(void) {
  if (Brain.Screen.pressing()) {
+
+    // LEFT SIDE AUTON
     if (Brain.Screen.xPosition() <= 240) {
       side = true;
       Brain.Screen.setFillColor("#909090");
       Brain.Screen.drawRectangle(245, 15, 225, 215);
       Brain.Screen.setFont(fontType::prop60);
       Brain.Screen.printAt( 70, 136, "Left" );
+
+      // RIGHT SIDE AUTON
     } else if (Brain.Screen.xPosition() > 240) {
       side = false;
       Brain.Screen.setFillColor("#909090");
@@ -95,31 +99,59 @@ void autonomous(void) {
   if (!side) {
     // Drive the drivetrain for 10 inches at 100 rpm.
 
+    // RIGHT SIDE AUTON
 
+    // pick up group of cubes
     Hopper.spin(reverse, 80, percentUnits::pct);
     Intake.spin(reverse, 80, percentUnits::pct);
     Top.spin(reverse, 80, percentUnits::pct);
     Drivetrain.driveFor(65.07988, distanceUnits::cm, 190, rpm);
     wait(1,seconds);
-    Drivetrain.turnFor(115, rotationUnits::deg, true);
-    Drivetrain.driveFor(60.07988, distanceUnits::cm, 190, rpm);
-    Drivetrain.turnFor(-65, rotationUnits::deg, true);
-    Drivetrain.driveFor(60.07988, distanceUnits::cm, 190, rpm);
-    Drivetrain.turnFor(67, rotationUnits::deg, true);
-    Scraper.set(false);
-    Drivetrain.driveFor(49.07988, distanceUnits::cm, 190, rpm);
-    wait(2, sec);
-    Drivetrain.driveFor(-30, distanceUnits::cm, 190, rpm);
-    Scraper.set(true);
-    Drivetrain.turnFor(94, rotationUnits::deg, true);
-    Drivetrain.driveFor(135.07988, distanceUnits::cm, 190, rpm);
 
+    // stop spinning intake and hopper and list and stuff
+    Hopper.stop();
+    Intake.stop();
+    Top.stop();
+
+    // turn towards the middle goal
+    Drivetrain.turnFor(-40, rotationUnits::deg, true);
+    Drivetrain.driveFor(50, distanceUnits::cm, 190, rpm);
+    wait(0.7, sec);
+
+    // score
+    Hopper.spin(forward, 80, percentUnits::pct);
+    Intake.spin(forward, 30, percentUnits::pct);
+    Top.spin(forward, 80, percentUnits::pct);
+    wait(1.5, sec);
+
+    // drive back
+    Drivetrain.driveFor(-50, distanceUnits::cm, 190, rpm);
+
+    // other stuff
+    // Drivetrain.turnFor(115, rotationUnits::deg, true);
+    // Drivetrain.driveFor(60.07988, distanceUnits::cm, 190, rpm);
+    // Drivetrain.turnFor(-65, rotationUnits::deg, true);
+    // Drivetrain.driveFor(60.07988, distanceUnits::cm, 190, rpm);
+    // Drivetrain.turnFor(67, rotationUnits::deg, true);
+    // Scraper.set(false);
+    // Drivetrain.driveFor(49.07988, distanceUnits::cm, 190, rpm);
+    // wait(2, sec);
+    // Drivetrain.driveFor(-30, distanceUnits::cm, 190, rpm);
+    // Scraper.set(true);
+    // Drivetrain.turnFor(94, rotationUnits::deg, true);
+    // Drivetrain.driveFor(135.07988, distanceUnits::cm, 190, rpm);
+
+    // LEFT SIDE AUTON
   } else if (side) {
+
+    // pick up cubes
     Hopper.spin(reverse, 80, percentUnits::pct);
     Intake.spin(reverse, 80, percentUnits::pct);
     Top.spin(reverse, 80, percentUnits::pct);
     Drivetrain.driveFor(65.07988, distanceUnits::cm, 190, rpm);
     wait(1,seconds);
+
+    // other stuff
     Drivetrain.turnFor(-115, rotationUnits::deg, true);
     Drivetrain.driveFor(60.07988, distanceUnits::cm, 190, rpm);
     Drivetrain.turnFor(65, rotationUnits::deg, true);

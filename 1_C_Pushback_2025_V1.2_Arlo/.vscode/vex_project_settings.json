@@ -1,0 +1,18 @@
+{
+	"project": {
+		"name": "1_C_Pushback_2025_V1_1_Arlo",
+		"slot": 2,
+		"description": "Empty V5 C++ Project",
+		"platform": "V5",
+		"creationDate": "Fri, 29 Aug 2025 20:33:25 GMT",
+		"language": "cpp",
+		"sdkVersion": "V5_20240802_15_00_00",
+		"cpp": {
+			"includePath": []
+		}
+	},
+	"extension": {
+		"version": "0.7.2025041600",
+		"json": 1
+	}
+}
