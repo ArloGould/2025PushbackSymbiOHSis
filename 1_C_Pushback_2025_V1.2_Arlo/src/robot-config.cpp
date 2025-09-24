@@ -9,18 +9,25 @@ brain  Brain;
 
 // VEXcode device constructors
 controller Controller1 = controller(primary);
-motor Intake = motor(PORT8, ratio18_1, false);
-motor leftMotorA = motor(PORT10, ratio18_1, true);
-motor leftMotorB = motor(PORT5, ratio18_1, false);
-motor leftMotorC = motor(PORT6, ratio18_1, true);
+
+
+
+motor leftMotorA = motor(PORT18, ratio18_1, false);
+motor leftMotorB = motor(PORT19, ratio18_1, false);
+motor leftMotorC = motor(PORT20, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB, leftMotorC);
-motor rightMotorA = motor(PORT1, ratio18_1, false);
+
+motor rightMotorA = motor(PORT1, ratio18_1, true);
 motor rightMotorB = motor(PORT2, ratio18_1, true);
-motor rightMotorC = motor(PORT3, ratio18_1, false);
+motor rightMotorC = motor(PORT3, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB, rightMotorC);
+
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 267, 300, 228, mm, 1.67);
-motor Hopper = motor(PORT9, ratio18_1, false);
-motor Top = motor(PORT7, ratio18_1, false);
+
+motor Top = motor(PORT11, ratio18_1, true);
+motor Intake = motor(PORT12, ratio6_1, false);
+motor Hopper = motor(PORT13, ratio18_1, false);
+
 digital_out Scraper = digital_out(Brain.ThreeWirePort.G);
 digital_out Aligner = digital_out(Brain.ThreeWirePort.C);
 
@@ -40,8 +47,8 @@ int rc_auto_loop_function_Controller1() {
       // calculate the drivetrain motor velocities from the controller joystick axies
       // left = Axis3 + Axis1
       // right = Axis3 - Axis1
-      int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
-      int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+      int drivetrainLeftSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+      int drivetrainRightSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
       
       // check if the value is inside of the deadband range
       if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {

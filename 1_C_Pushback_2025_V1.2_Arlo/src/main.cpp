@@ -182,26 +182,37 @@ void autonomous(void) {
 void usercontrol(void) {
   
   while (1) {
+
+    // scoring middle goal
     if (Controller1.ButtonL1.pressing()) {
         Hopper.spin(fwd, 80, percentUnits::pct);
-        Top.spin(reverse, 80, percentUnits::pct);
+        Top.spin(reverse, 50, percentUnits::pct);
         Intake.spin(reverse, 80, percentUnits::pct);
         Aligner.set(false);
+
+    // scoring top goal
       } else if (Controller1.ButtonL2.pressing()) {
         Hopper.spin(fwd, 80, percentUnits::pct);
-        Top.spin(fwd, 80, percentUnits::pct);
+        Top.spin(fwd, 50, percentUnits::pct);
         Intake.spin(reverse, 80, percentUnits::pct);
         Aligner.set(false);
+
+    // loading into hopper
       } else if (Controller1.ButtonR1.pressing()) {
         Hopper.spin(reverse, 80, percentUnits::pct);
         Intake.spin(reverse, 80, percentUnits::pct);
-        Top.spin(reverse, 80, percentUnits::pct);
+        //Top.spin(reverse, 80, percentUnits::pct);
+        Top.stop(hold);
         Aligner.set(true);
+
+    // scoring bottom goal / outtake
       } else if (Controller1.ButtonR2.pressing()) {
         Hopper.spin(fwd, 80, percentUnits::pct);
         Intake.spin(fwd, 80, percentUnits::pct);
-        Top.spin(fwd, 80, percentUnits::pct);
+        //Top.spin(fwd, 80, percentUnits::pct);
+        Top.stop(hold);
       } else {
+
         Hopper.stop(hold);
         Intake.stop(hold);
         Top.stop(hold);
