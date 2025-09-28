@@ -64,6 +64,10 @@ void pre_auton(void) {
   vexcodeInit();
   Scraper.set(true); 
   Aligner.set(true);
+  
+  // rotation and position are the exact same lmao
+  Tracker.setRotation(0, deg);
+
   Brain.Screen.setPenColor(black);
   Brain.Screen.setFillColor("#808080");
   Brain.Screen.drawRectangle(10, 10, 230, 220);
@@ -182,6 +186,19 @@ void autonomous(void) {
 void usercontrol(void) {
   
   while (1) {
+
+    // recieve and print robot's battery to the controller screen
+    int battery = Brain.Battery.capacity(percent);
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("Battery: %d%", battery);
+
+    // reviece tracking wheel rotation
+    double rotation_deg = Tracker.rotation(deg);
+
+    // print tracking wheel rotation and position
+    Controller1.Screen.setCursor(2, 1);
+    Controller1.Screen.print("rot: %.2lf", rotation_deg);
 
     // scoring middle goal
     if (Controller1.ButtonL1.pressing()) {

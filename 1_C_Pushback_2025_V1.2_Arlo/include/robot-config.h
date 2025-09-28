@@ -10,6 +10,7 @@ extern motor Hopper;
 extern motor Top;
 extern digital_out Scraper;
 extern digital_out Aligner;
+extern encoder Tracker;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
