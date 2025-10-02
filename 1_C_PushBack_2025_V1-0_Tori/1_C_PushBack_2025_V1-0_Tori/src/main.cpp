@@ -1,22 +1,90 @@
 #include "main.h"
+#include "lemlib/api.hpp"
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // drivetrain motors
-pros::MotorGroup left_motors({18, 19, 20});
-pros::MotorGroup right_motors({-1, -2, -3});
+pros::MotorGroup left_motors({18, 19, 20}, pros::MotorGearset::green);
+pros::MotorGroup right_motors({-1, -2, -3}, pros::MotorGearset::green);
 
-//motors=
-pros::Motor top_roller(-11);
-pros::Motor intake_roller(12);
-pros::Motor hopper_roller(13);
+// drivetrain 
+lemlib::Drivetrain drivetrain(
+	&left_motors, // pointer to left drivetrain group
+	&right_motors, // pointer to right drivetrain group
+	14, // space between either side of drivetrain
+	lemlib::Omniwheel::OLD_325, // size of wheel
+	333, // rpm of wheels in drivetrain
+	4 // higher value = faster speed. since we have omni wheels AND traction wheels, 
+);					  // I chose 4, since we may still experience slippage on the drivetrain.
+					  // It may still be worth trying this with 8, but it will depend on how much traction our drivetrain has.
 
-//3 wire ports
+// input curve for throttle input during driver control
+lemlib::ExpoDriveCurve throttleCurve(
+	3, // joystick deadband out of 127
+    10, // minimum output where drivetrain will move out of 127
+    1.019 // expo curve gain
+);
+
+// input curve for steer input during driver control
+lemlib::ExpoDriveCurve steerCurve(
+	3, // joystick deadband out of 127
+    10, // minimum output where drivetrain will move out of 127
+    1.019 // expo curve gain
+);
+
+
+// motors
+pros::Motor top_roller(-11, pros::MotorGearset::green);
+pros::Motor intake_roller(12, pros::MotorGearset::red);
+pros::Motor hopper_roller(13, pros::MotorGearset::green);
+
+// 3 wire ports
 pros::adi::Pneumatics scraper('F', false);
 bool scraper_down = false;
 
-pros::adi::Encoder tracker({4, 'G', 'H'}, true);
+pros::adi::Encoder encoder({4, 'G', 'H'}, true);
+
+// lemlib tracking wheel
+lemlib::TrackingWheel tracking_vertical(&encoder, lemlib::Omniwheel::OLD_275, 1);
+
+lemlib::OdomSensors sensors(
+	&tracking_vertical, // our only tracking wheel :sob:
+	nullptr, // null pointer for second vertical tracker
+	nullptr, // null pointer since we have no horizontal trackers
+	nullptr, // null pointer for second horizontal tracker
+	nullptr // null pointer for inertial sensor
+);
+
+// lateral motion controller
+lemlib::ControllerSettings linear_controller(
+	10, 
+	0, 
+	3,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0
+);
+
+// angular motion controller
+lemlib::ControllerSettings angular_controller(
+	2, 
+	0,
+	10,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0
+);
+
+
+// chassis class
+lemlib::Chassis chassis(drivetrain, linear_controller, angular_controller, sensors, &throttleCurve, &steerCurve);
 
 
 
@@ -78,7 +146,11 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	chassis.setPose(0, 0, 0);
+
+	chassis.moveToPoint(0, 1, 15000);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
