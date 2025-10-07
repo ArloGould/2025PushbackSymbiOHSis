@@ -41,7 +41,7 @@ pros::Motor hopper_roller(13, pros::MotorGearset::green);
 
 // 3 wire ports
 pros::adi::Pneumatics scraper('F', false);
-bool scraper_down = false;
+pros::adi::Pneumatics aligner('E', false);
 
 pros::adi::Encoder encoder({4, 'G', 'H'}, true);
 
@@ -195,7 +195,7 @@ void opcontrol() {
 		}
 
 		// scoring middle goal
-		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
 		{
 			hopper_roller.move(100);
 			intake_roller.move(-100);
@@ -203,7 +203,7 @@ void opcontrol() {
 		}
 
 		// scoring top goal
-		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
 		{
 			hopper_roller.move(100);
 			intake_roller.move(-100);
@@ -218,6 +218,8 @@ void opcontrol() {
 			top_roller.brake();
 		}
 
+		// --------PNEUMATICS-----------------
+
 		// drop scraper
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
 		{
@@ -228,6 +230,19 @@ void opcontrol() {
 		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP))
 		{
 			scraper.retract();
+		}
+
+
+		// drop aligner
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+		{
+			aligner.extend();
+		}
+
+		// lift aligner
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B))
+		{
+			aligner.retract();
 		}
 
 		pros::delay(20); // Run for 20 ms then update
