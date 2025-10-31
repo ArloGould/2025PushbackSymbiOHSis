@@ -147,9 +147,9 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	chassis.setPose(0, 0, 0);
+	// chassis.setPose(0, 0, 0);
 
-	chassis.moveToPoint(0, 1, 15000);
+	// chassis.moveToPoint(0, 1, 15000);
 }
 
 /**
