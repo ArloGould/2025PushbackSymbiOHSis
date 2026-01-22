@@ -5,8 +5,8 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // drivetrain motors
-pros::MotorGroup left_motors({18, 19, 20}, pros::MotorGearset::green);
-pros::MotorGroup right_motors({-1, -2, -3}, pros::MotorGearset::green);
+pros::MotorGroup left_motors({18, 19, 17}, pros::MotorGearset::blue);
+pros::MotorGroup right_motors({-1, -2, -3}, pros::MotorGearset::blue);
 
 // drivetrain 
 lemlib::Drivetrain drivetrain(
@@ -35,9 +35,11 @@ lemlib::ExpoDriveCurve steerCurve(
 
 
 // motors
-pros::Motor top_roller(-11, pros::MotorGearset::green);
-pros::Motor intake_roller(12, pros::MotorGearset::red);
-pros::Motor hopper_roller(13, pros::MotorGearset::green);
+// pros::Motor top_roller(-11, pros::MotorGearset::green);
+// pros::Motor intake_roller(12, pros::MotorGearset::red);
+// pros::Motor hopper_roller(13, pros::MotorGearset::green);
+pros::Motor Intake_1(11, pros::MotorGearset::blue);
+pros::Motor Intake_2(-12, pros::MotorGearset::blue);
 
 // 3 wire ports
 pros::adi::Pneumatics scraper('F', false);
@@ -179,43 +181,61 @@ void opcontrol() {
 		right_motors.move(dir + turn);                     // Sets right motor voltage
 
 		// intake into hopper
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		// if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		// {
+		// 	hopper_roller.move(-100);
+		// 	intake_roller.move(-100);
+		// 	top_roller.brake();
+		// }
+
+		// // scoring bottom goal/outtake
+		// else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		// {
+		// 	hopper_roller.move(100);
+		// 	intake_roller.move(100);
+		// 	top_roller.brake();
+		// }
+
+		// // scoring middle goal
+		// else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+		// {
+		// 	hopper_roller.move(100);
+		// 	intake_roller.move(-100);
+		// 	top_roller.move(-70);
+		// }
+
+		// // scoring top goal
+		// else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+		// {
+		// 	hopper_roller.move(100);
+		// 	intake_roller.move(-100);
+		// 	top_roller.move(70);
+		// }
+
+		// // stop motors if no buttons are being pressed
+		// else
+		// {
+		// 	hopper_roller.brake();
+		// 	intake_roller.brake();
+		// 	top_roller.brake();
+		// }
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
 		{
-			hopper_roller.move(-100);
-			intake_roller.move(-100);
-			top_roller.brake();
+			Intake_1.move(100);
+			Intake_2.move(100);
 		}
 
-		// scoring bottom goal/outtake
-		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
-		{
-			hopper_roller.move(100);
-			intake_roller.move(100);
-			top_roller.brake();
-		}
-
-		// scoring middle goal
 		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
 		{
-			hopper_roller.move(100);
-			intake_roller.move(-100);
-			top_roller.move(-70);
+			Intake_1.move(-100);
+			Intake_2.move(-100);
 		}
 
-		// scoring top goal
-		else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
-		{
-			hopper_roller.move(100);
-			intake_roller.move(-100);
-			top_roller.move(70);
-		}
-
-		// stop motors if no buttons are being pressed
 		else
 		{
-			hopper_roller.brake();
-			intake_roller.brake();
-			top_roller.brake();
+			Intake_1.brake();
+			Intake_2.brake();
 		}
 
 		// --------PNEUMATICS-----------------
