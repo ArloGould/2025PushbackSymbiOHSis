@@ -148,15 +148,23 @@ void opcontrol() {
 		}
 
 		//PRINT SCREEN STUFF HERE!!!!
+		//the "master.clear() pros::delay(15)" lines are so that we can be able to print to multiple lines on the controller screen
+		//for some reason if you try to do different print things to multiple lines it will just print the first one
+		//and for whatever reason clearing the screen and delaying it by at least 15ms will let you do this fine
 
 		bot_battery = pros::battery::get_capacity();
 		master.print(0, 0, "b: %1.0lf", bot_battery);
 		master.clear();
 		pros::delay(15);
 		
-		double intake_temps = (intake_1.get_temperature() + intake_2.get_temperature()) / 2;
+		int intake_1_temp = intake_1.get_temperature();
+		int intake_2_temp = intake_2.get_temperature();
+		int intake_temps = (intake_1_temp + intake_2_temp) / 2;
 
-		master.print(1, 0, "I: %lf", intake_temps);
+		master.print(1, 0, "I: %d", intake_temps);
+		master.clear();
+		pros::delay(15);
+		
 		
 
 		// master.print(1, 0, "Left=%lf, Right=%lf", left_temps, right_temps);
