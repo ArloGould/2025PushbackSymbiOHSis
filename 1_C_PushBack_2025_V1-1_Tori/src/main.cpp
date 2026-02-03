@@ -1,13 +1,14 @@
 #include "main.h"
 #include "lemlib/api.hpp"
+#include "2900/globals.h"
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 //left and right sides of the drivetrain
-pros::MotorGroup right_dt({-1, -2, -3}, pros::MotorGearset::blue);
-pros::MotorGroup left_dt({18, 19, 20}, pros::MotorGearset::blue);
+pros::MotorGroup right_dt({RIGHTPORT1, RIGHTPORT2, RIGHTPORT3}, pros::MotorGearset::blue);
+pros::MotorGroup left_dt({LEFTPORT1, LEFTPORT2, LEFTPORT3}, pros::MotorGearset::blue);
 
-pros::Imu imu(10);
+pros::Imu imu(IMU);
 
 lemlib::Drivetrain Drivetrain
 (
@@ -21,8 +22,8 @@ lemlib::Drivetrain Drivetrain
 
 
 // intake motors, this is a motor group since they will always be spinning together
-pros::Motor intake_1(-11, pros::MotorGearset::blue);
-pros::Motor intake_2(12, pros::MotorGearset::blue);
+pros::Motor intake_1(INTAKEPORT2, pros::MotorGearset::blue);
+pros::Motor intake_2(INTAKEPORT2, pros::MotorGearset::blue);
 // pros::MotorGroup Intake({-11, 12}, pros::MotorGearset::blue);
 
 //penumatics
