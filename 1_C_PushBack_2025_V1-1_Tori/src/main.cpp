@@ -29,6 +29,7 @@ pros::Motor intake_2(INTAKEPORT2, pros::MotorGearset::blue);
 //penumatics
 pros::adi::Pneumatics outtake_1('A', false);
 pros::adi::Pneumatics outtake_2('B', false);
+pros::adi::Pneumatics indexer('E', true);
 
 double bot_battery = 0;
 std::int32_t control_battery = 0;
@@ -146,6 +147,16 @@ void opcontrol() {
 		{
 			outtake_1.retract();
 			outtake_2.retract();
+		}
+
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+		{
+			indexer.retract();
+		}
+
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B));
+		{
+			indexer.extend();
 		}
 
 		//PRINT SCREEN STUFF HERE!!!!
