@@ -1,8 +1,8 @@
 #include "main.h"
 #include "lemlib/api.hpp"
-#include "2900/globals.h"
-
-pros::Controller master(pros::E_CONTROLLER_MASTER);
+#include "toriLibInclude/globals.h"
+#include "toriLibInclude/subsystems.hpp"
+#include "toriLibInclude/devices.hpp"
 
 //left and right sides of the drivetrain
 pros::MotorGroup right_dt({RIGHTPORT1, RIGHTPORT2, RIGHTPORT3}, pros::MotorGearset::blue);
@@ -20,15 +20,7 @@ lemlib::Drivetrain Drivetrain
 	4
 );
 
-
-// intake motors, this is a motor group since they will always be spinning together
-pros::Motor intake_1(INTAKEPORT2, pros::MotorGearset::blue);
-pros::Motor intake_2(INTAKEPORT2, pros::MotorGearset::blue);
-// pros::MotorGroup Intake({-11, 12}, pros::MotorGearset::blue);
-
-//penumatics
-pros::adi::Pneumatics outtake_1('A', false);
-pros::adi::Pneumatics outtake_2('B', false);
+subsystems::intake intake = subsystems::intake(INTAKEPORT1, INTAKEPORT2, OUTTAKEPISTON1, OUTTAKEPISTON2, INDEXERPISTON);
 
 double bot_battery = 0;
 std::int32_t control_battery = 0;
@@ -57,7 +49,6 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 
@@ -118,35 +109,7 @@ void opcontrol() {
 		left_dt.move(dir - turn);                      // Sets left motor voltage
 		right_dt.move(dir + turn);                     // Sets right motor voltage
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) 
-		{
-			intake_1.move(100);
-			intake_2.move(100);
-		}
-
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
-		{
-			intake_1.move(-100);
-			intake_2.move(-100);
-		}
-
-		else
-		{
-			intake_1.brake();
-			intake_2.brake();
-		}
-
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP))
-		{
-			outtake_1.extend();
-			outtake_2.extend();
-		}
-
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
-		{
-			outtake_1.retract();
-			outtake_2.retract();
-		}
+		intake::driveFunctions();
 
 		//PRINT SCREEN STUFF HERE!!!!
 		//the "master.clear() pros::delay(15)" lines are so that we can be able to print to multiple lines on the controller screen
