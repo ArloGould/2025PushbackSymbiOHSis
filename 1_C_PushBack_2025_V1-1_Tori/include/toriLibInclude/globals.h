@@ -19,16 +19,29 @@
 
 //peu matics
     //outtake
-    #define OUTTAKEPISTON1 'A'
-    #define OUTTAKEPISTON2 'B'
+    #define OUTTAKEPISTONS 'B'
 
     //scraper
-    #define SCRAPERPISTON 'C'
+    #define SCRAPERPISTON 'A'
 
     //indexer
-    #define INDEXERPISTON 'D'
+    #define INDEXERPISTON 'H'
 
 
 //intake motors
 #define INTAKEPORT1 -11
 #define INTAKEPORT2 12
+
+//controls
+    //intaking
+    #define LOADCUBES pros::E_CONTROLLER_DIGITAL_R1
+    #define SCRAPERDOWN pros::E_CONTROLLER_DIGITAL_DOWN
+    #define SCRAPERUP pros::E_CONTROLLER_DIGITAL_DOWN
+
+    //goal scoring
+    #define SCOREL1 pros::E_CONTROLLER_DIGITAL_R2
+    #define SCOREL2 pros::E_CONTROLLER_DIGITAL_L2
+    #define SCOREL3 pros::E_CONTROLLER_DIGITAL_L1
+
+    //lower outtake
+    #define LOWERBOT pros::E_CONTROLLER_DIGITAL_B

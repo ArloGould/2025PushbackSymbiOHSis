@@ -20,7 +20,7 @@ lemlib::Drivetrain Drivetrain
 	4
 );
 
-subsystems::intake intake = subsystems::intake(INTAKEPORT1, INTAKEPORT2, OUTTAKEPISTON1, OUTTAKEPISTON2, INDEXERPISTON);
+subsystems::intake intake = subsystems::intake(INTAKEPORT1, INTAKEPORT2, OUTTAKEPISTONS, INDEXERPISTON);
 
 double bot_battery = 0;
 std::int32_t control_battery = 0;
@@ -109,7 +109,7 @@ void opcontrol() {
 		left_dt.move(dir - turn);                      // Sets left motor voltage
 		right_dt.move(dir + turn);                     // Sets right motor voltage
 
-		intake::driveFunctions();
+		intake.driveFunctions();
 
 		//PRINT SCREEN STUFF HERE!!!!
 		//the "master.clear() pros::delay(15)" lines are so that we can be able to print to multiple lines on the controller screen
@@ -121,13 +121,13 @@ void opcontrol() {
 		master.clear();
 		pros::delay(15);
 		
-		int intake_1_temp = intake_1.get_temperature();
-		int intake_2_temp = intake_2.get_temperature();
-		int intake_temps = (intake_1_temp + intake_2_temp) / 2;
+		// int intake_1_temp = intake_1.get_temperature();
+		// int intake_2_temp = intake_2.get_temperature();
+		// int intake_temps = (intake_1_temp + intake_2_temp) / 2;
 
-		master.print(1, 0, "I: %d", intake_temps);
-		master.clear();
-		pros::delay(15);
+		// master.print(1, 0, "I: %d", intake_temps);
+		// master.clear();
+		// pros::delay(15);
 		
 		
 
