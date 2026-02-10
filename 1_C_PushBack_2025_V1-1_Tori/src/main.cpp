@@ -22,14 +22,15 @@ lemlib::Drivetrain Drivetrain
 
 
 // intake motors, this is a motor group since they will always be spinning together
-pros::Motor intake_1(INTAKEPORT2, pros::MotorGearset::blue);
-pros::Motor intake_2(INTAKEPORT2, pros::MotorGearset::blue);
+pros::Motor intake_1(-11, pros::MotorGearset::blue);
+pros::Motor intake_2(12, pros::MotorGearset::blue);
 // pros::MotorGroup Intake({-11, 12}, pros::MotorGearset::blue);
 
 //penumatics
-pros::adi::Pneumatics outtake_1('A', false);
+// pros::adi::Pneumatics outtake_1('A', false);
 pros::adi::Pneumatics outtake_2('B', false);
-pros::adi::Pneumatics indexer('E', true);
+pros::adi::Pneumatics indexer('H', true);
+pros::adi::Pneumatics scraper('A', false, true);
 
 double bot_battery = 0;
 std::int32_t control_battery = 0;
@@ -139,13 +140,13 @@ void opcontrol() {
 
 		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP))
 		{
-			outtake_1.extend();
+			// outtake_1.extend();
 			outtake_2.extend();
 		}
 
 		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
 		{
-			outtake_1.retract();
+			// outtake_1.retract();
 			outtake_2.retract();
 		}
 
@@ -154,9 +155,19 @@ void opcontrol() {
 			indexer.retract();
 		}
 
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B));
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B))
 		{
 			indexer.extend();
+		}
+
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+		{
+			scraper.extend();
+		}
+
+		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+		{
+			scraper.retract();
 		}
 
 		//PRINT SCREEN STUFF HERE!!!!
