@@ -12,18 +12,22 @@ namespace subsystems
 
             pros::adi::Pneumatics Outtakes;
             pros::adi::Pneumatics Indexer;
+            pros::adi::Pneumatics Scraper;
         
             //constructor for intake
             intake(
                 int intake1Port, 
                 int intake2Port, 
                 char outtakesPort, 
-                char indexerPort
+                char indexerPort,
+                char scraperPort
             );
 
             pros::MotorGroup Intake;
 
             void driveFunctions();
+
+            void startCode();
 
     };
     

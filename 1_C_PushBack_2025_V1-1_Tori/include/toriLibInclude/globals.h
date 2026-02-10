@@ -43,5 +43,6 @@
     #define SCOREL2 pros::E_CONTROLLER_DIGITAL_L2
     #define SCOREL3 pros::E_CONTROLLER_DIGITAL_L1
 
-    //lower outtake
+    //manual outtake toggling
     #define LOWERBOT pros::E_CONTROLLER_DIGITAL_B
+    #define RAISEBOT pros::E_CONTROLLER_DIGITAL_A

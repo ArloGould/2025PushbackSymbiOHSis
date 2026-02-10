@@ -11,63 +11,86 @@ namespace subsystems
             int intake1Port, 
             int intake2Port, 
             char outtakesPort,
-            char indexerPort
+            char indexerPort,
+            char scraperPort
         ): 
         //it goes [name](pros::motor(other stuff)) instead of pros::motor [name](other stuff) because we already 
         //defined the names in the header file just without the port and gearset, which we are now adding
         Intake1(pros::Motor(intake1Port, pros::MotorGearset::blue)),
         Intake2(pros::Motor(intake2Port, pros::MotorGearset::blue)),
 
-        Outtakes(pros::adi::Pneumatics(outtakesPort, false, false)),
+        Outtakes(pros::adi::Pneumatics(outtakesPort, true)),
+        Indexer(pros::adi::Pneumatics(indexerPort, false)),
+        Scraper(pros::adi::Pneumatics(scraperPort, false))
 
-        Indexer(pros::adi::Pneumatics(indexerPort, true, false))
         {}
 
         pros::MotorGroup Intake({Intake1, Intake2});
 
         void intake::driveFunctions()
         {
+            //all the code for this is kinda spagettish
+            //maybe change this later to be like how alister did it
+            // cause thats cleaner and easier to read
+
             //load cubes
             if(master.get_digital(LOADCUBES))
             {
                 Intake.move_velocity(550);
-                Indexer.extend();
+                Indexer.retract();
             }
 
             //score bottom goal
-            if(master.get_digital(SCOREL1))
+            else if(master.get_digital(SCOREL1))
             {
                 Intake.move_velocity(-600);
             }
 
             //score middle goal
-            if(master.get_digital(SCOREL2))
+            else if(master.get_digital(SCOREL2))
             {
-                //
+                Outtakes.retract();
+                Indexer.extend();
+                Intake.move_velocity(600);
             }
 
             //score long goal
-            if(master.get_digital(SCOREL3))
+            else if(master.get_digital(SCOREL3))
             {
-                //
+                Indexer.extend();
+                Intake.move_velocity(600);
+            }
+
+            //if you aint pressing a macro that spins the intake motors,
+            // brake them
+            else
+            {
+                Intake.brake()
             }
 
             //lower scraper
             if(master.get_digital(SCRAPERDOWN))
             {
-                //
+                Outtakes.extend();
+                Scraper.extend();
             }
 
             //lift scraper
             if(master.get_digital(SCRAPERUP))
             {
-                //
+                Scraper.retract();
+            }
+
+            //lift outtake
+            if(master.get_digital(RAISEBOT))
+            {
+                Outtakes.extend();
             }
 
             //lower outtake
             if(master.get_digital(LOWERBOT))
             {
-                //
+                Outtakes.retract();
             }
 
             // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) 
@@ -97,5 +120,12 @@ namespace subsystems
             // {
             //     Outtakes.retract();
             // }
+        };
+
+        void intake::startCode()
+        {
+            Scraper.retract();
+            Indexer.retract();
+            Outtakes.extend();
         }
 }
