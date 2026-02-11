@@ -12,15 +12,56 @@ pros::Imu imu(IMU);
 
 lemlib::Drivetrain Drivetrain
 (
-	&left_dt, 
+	&left_dt, //drivetrain side groups
 	&right_dt, 
-	10.25,
+	TRACKWIDTH, 
 	lemlib::Omniwheel::OLD_325,
-	450,
-	4
+	WHEELRPM,
+	HORIZONTALDRIFT
 );
 
-subsystems::intake intake = subsystems::intake(INTAKEPORT1, INTAKEPORT2, OUTTAKEPISTONS, INDEXERPISTON);
+// we dont have any tracking wheels so they just get null pointers
+// surely this wont mess up anything in the future!! 
+lemlib::OdomSensors Sensors(
+	nullptr, nullptr, //vertical tracking wheel 1 and 2
+	nullptr, nullptr, //horizontal tracking wheel 1 and 2
+	&imu
+);
+
+// lateral PID controller
+lemlib::ControllerSettings lateral_controller(
+	10, // proportional gain (kP)
+    0, // integral gain (kI)
+	3, // derivative gain (kD)
+    3, // anti windup
+    1, // small error range, in inches
+    100, // small error range timeout, in milliseconds
+    3, // large error range, in inches
+    500, // large error range timeout, in milliseconds
+    20 // maximum acceleration (slew)
+);
+
+// angular PID controller
+lemlib::ControllerSettings angular_controller(
+	2, // proportional gain (kP)
+    0, // integral gain (kI)
+    10, // derivative gain (kD)
+    3, // anti windup
+    1, // small error range, in degrees
+    100, // small error range timeout, in milliseconds
+    3, // large error range, in degrees
+    500, // large error range timeout, in milliseconds
+    0 // maximum acceleration (slew)
+);
+
+lemlib::Chassis chassis(
+	Drivetrain,
+	lateral_controller,
+	angular_controller,
+	Sensors
+);
+
+subsystems::intake intake = subsystems::intake(INTAKEPORT1, INTAKEPORT2, OUTTAKEPISTONS, INDEXERPISTON, SCRAPERPISTON);
 
 double bot_battery = 0;
 std::int32_t control_battery = 0;
@@ -33,6 +74,7 @@ std::int32_t control_battery = 0;
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	pros::lcd::initialize();
 	master.clear();
 	intake.startCode();
 }
@@ -42,9 +84,7 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {
-	intake.startCode();
-}
+void disabled() {}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -89,12 +129,15 @@ void opcontrol() {
 
 	while (true) {
 
-		// Arcade control scheme
-		int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
-		int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
-		left_dt.move(dir - turn);                      // Sets left motor voltage
-		right_dt.move(dir + turn);                     // Sets right motor voltage
+		// get vertical value for left joystick
+		int leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		// get horizontal value for right joystick
+		int rightX = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		// drive the robot rahhhh
+		// leftY = throttle, rightX = turning
+		chassis.arcade(leftY, rightX);
 
+		// runs driver functions defined in subsystems.cpp
 		intake.driveFunctions();
 
 		//PRINT SCREEN STUFF HERE!!!!

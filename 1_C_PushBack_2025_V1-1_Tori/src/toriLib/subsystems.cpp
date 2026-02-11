@@ -22,7 +22,6 @@ namespace subsystems
         Outtakes(pros::adi::Pneumatics(outtakesPort, true)),
         Indexer(pros::adi::Pneumatics(indexerPort, false)),
         Scraper(pros::adi::Pneumatics(scraperPort, false))
-
         {}
 
         pros::MotorGroup Intake({Intake1, Intake2});
@@ -127,5 +126,5 @@ namespace subsystems
             Scraper.retract();
             Indexer.retract();
             Outtakes.extend();
-        }
+        };
 }

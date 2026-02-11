@@ -13,6 +13,8 @@
     // idk other stuff
     #define TRACKWIDTH 10.25
     #define WHEELBASE 11
+    #define WHEELRPM 450
+    #define HORIZONTALDRIFT 8
 
 //imu port
 #define IMU 10
