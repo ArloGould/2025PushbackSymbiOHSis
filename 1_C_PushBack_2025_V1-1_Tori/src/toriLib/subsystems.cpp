@@ -1,5 +1,6 @@
-#include "toriLibInclude/subsystems.hpp"
-#include "toriLibInclude/globals.h"
+#include "main.h"
+#include "../include/toriLibInclude/subsystems.hpp"
+#include "../include/toriLibInclude/globals.h"
 #include "../include/toriLibInclude/devices.hpp"
 namespace subsystems
 {
@@ -24,8 +25,6 @@ namespace subsystems
         Scraper(pros::adi::Pneumatics(scraperPort, false))
         {}
 
-        pros::MotorGroup Intake({Intake1, Intake2});
-
         void intake::driveFunctions()
         {
             //all the code for this is kinda spagettish
@@ -35,14 +34,16 @@ namespace subsystems
             //load cubes
             if(master.get_digital(LOADCUBES))
             {
-                Intake.move_velocity(550);
+                Intake1.move_velocity(550);
+                Intake2.move_velocity(550);
                 Indexer.retract();
             }
 
             //score bottom goal
             else if(master.get_digital(SCOREL1))
             {
-                Intake.move_velocity(-600);
+                Intake1.move_velocity(-600);
+                Intake2.move_velocity(-600);
             }
 
             //score middle goal
@@ -50,21 +51,24 @@ namespace subsystems
             {
                 Outtakes.retract();
                 Indexer.extend();
-                Intake.move_velocity(600);
+                Intake1.move_velocity(600);
+                Intake2.move_velocity(600);
             }
 
             //score long goal
             else if(master.get_digital(SCOREL3))
             {
                 Indexer.extend();
-                Intake.move_velocity(600);
+                Intake1.move_velocity(600);
+                Intake2.move_velocity(600);
             }
 
             //if you aint pressing a macro that spins the intake motors,
             // brake them
             else
             {
-                Intake.brake()
+                Intake1.brake();
+                Intake2.brake();
             }
 
             //lower scraper

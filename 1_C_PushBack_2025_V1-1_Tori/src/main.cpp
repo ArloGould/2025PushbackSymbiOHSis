@@ -1,8 +1,8 @@
 #include "main.h"
 #include "lemlib/api.hpp"
-#include "toriLibInclude/globals.h"
-#include "toriLibInclude/subsystems.hpp"
-#include "toriLibInclude/devices.hpp"
+
+#include "../include/toriLibInclude/devices.hpp"
+#include "../include/toriLibInclude/subsystems.hpp"
 
 //left and right sides of the drivetrain
 pros::MotorGroup right_dt({RIGHTPORT1, RIGHTPORT2, RIGHTPORT3}, pros::MotorGearset::blue);

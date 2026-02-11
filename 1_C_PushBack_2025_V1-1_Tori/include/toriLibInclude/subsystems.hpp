@@ -1,3 +1,4 @@
+#pragma once
 #include "main.h"
 #include "toriLibInclude/globals.h"
 
@@ -22,8 +23,6 @@ namespace subsystems
                 char indexerPort,
                 char scraperPort
             );
-
-            pros::MotorGroup Intake;
 
             void driveFunctions();
 

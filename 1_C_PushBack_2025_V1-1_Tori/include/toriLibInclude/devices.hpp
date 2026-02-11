@@ -1,4 +1,3 @@
-#pragma once
 #include "main.h"
 
 //defines existance of the controller for devices.cpp where its given attributes

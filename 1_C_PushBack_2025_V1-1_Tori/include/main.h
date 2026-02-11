@@ -74,7 +74,12 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
-//#include <iostream>
+
+//my header files
+    #include "toriLibInclude/globals.h"
+    #include "toriLibInclude/devices.hpp"
+    #include "toriLibInclude/subsystems.hpp"
+
 #endif
 
 #endif  // _PROS_MAIN_H_
