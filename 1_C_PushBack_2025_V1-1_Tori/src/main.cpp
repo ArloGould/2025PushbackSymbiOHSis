@@ -8,8 +8,10 @@
 pros::MotorGroup right_dt({RIGHTPORT1, RIGHTPORT2, RIGHTPORT3}, pros::MotorGearset::blue);
 pros::MotorGroup left_dt({LEFTPORT1, LEFTPORT2, LEFTPORT3}, pros::MotorGearset::blue);
 
+// imu defined 
 pros::Imu imu(IMU);
 
+// drivetrain construction
 lemlib::Drivetrain Drivetrain
 (
 	&left_dt, //drivetrain side groups
@@ -54,6 +56,8 @@ lemlib::ControllerSettings angular_controller(
     0 // maximum acceleration (slew)
 );
 
+// chassis constructor 
+// this is what we actually use to drive the robot
 lemlib::Chassis chassis(
 	Drivetrain,
 	lateral_controller,
@@ -61,11 +65,19 @@ lemlib::Chassis chassis(
 	Sensors
 );
 
-subsystems::intake intake = subsystems::intake(INTAKEPORT1, INTAKEPORT2, OUTTAKEPISTONS, INDEXERPISTON, SCRAPERPISTON);
+// intake constructor
+// this is what we use to control everything in the intake
+// with like macros and stuff
+subsystems::intake intake = subsystems::intake(
+	INTAKEPORT1, 
+	INTAKEPORT2, 
+	OUTTAKEPISTONS, 
+	INDEXERPISTON, 
+	SCRAPERPISTON
+);
 
 double bot_battery = 0;
 std::int32_t control_battery = 0;
-
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -76,7 +88,6 @@ std::int32_t control_battery = 0;
 void initialize() {
 	pros::lcd::initialize();
 	master.clear();
-	intake.startCode();
 }
 
 /**
@@ -95,9 +106,7 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {
-	intake.startCode();
-}
+void competition_initialize() {}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -133,6 +142,7 @@ void opcontrol() {
 		int leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 		// get horizontal value for right joystick
 		int rightX = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		rightX = rightX * -1;
 		// drive the robot rahhhh
 		// leftY = throttle, rightX = turning
 		chassis.arcade(leftY, rightX);

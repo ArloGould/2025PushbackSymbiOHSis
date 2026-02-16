@@ -39,7 +39,7 @@
     //intaking
     #define LOADCUBES pros::E_CONTROLLER_DIGITAL_R1
     #define SCRAPERDOWN pros::E_CONTROLLER_DIGITAL_DOWN
-    #define SCRAPERUP pros::E_CONTROLLER_DIGITAL_DOWN
+    #define SCRAPERUP pros::E_CONTROLLER_DIGITAL_UP
 
     //goal scoring
     #define SCOREL1 pros::E_CONTROLLER_DIGITAL_R2

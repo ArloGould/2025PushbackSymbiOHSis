@@ -1,6 +1,5 @@
 #pragma once
 #include "main.h"
-#include "toriLibInclude/globals.h"
 
 namespace subsystems
 {
@@ -8,8 +7,7 @@ namespace subsystems
         public:
     
             // define all motors and solenoids used in the intake
-            pros::Motor Intake1;
-            pros::Motor Intake2;
+            pros::MotorGroup Intake;
 
             pros::adi::Pneumatics Outtakes;
             pros::adi::Pneumatics Indexer;
@@ -25,8 +23,6 @@ namespace subsystems
             );
 
             void driveFunctions();
-
-            void startCode();
 
     };
     

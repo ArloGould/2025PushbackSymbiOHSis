@@ -17,10 +17,10 @@ namespace subsystems
         ): 
         //it goes [name](pros::motor(other stuff)) instead of pros::motor [name](other stuff) because we already 
         //defined the names in the header file just without the port and gearset, which we are now adding
-        Intake1(pros::Motor(intake1Port, pros::MotorGearset::blue)),
-        Intake2(pros::Motor(intake2Port, pros::MotorGearset::blue)),
 
-        Outtakes(pros::adi::Pneumatics(outtakesPort, true)),
+        Intake(pros::MotorGroup({intake1Port, intake2Port}, pros::MotorGearset::blue)),
+
+        Outtakes(pros::adi::Pneumatics(outtakesPort, true, true)),
         Indexer(pros::adi::Pneumatics(indexerPort, false)),
         Scraper(pros::adi::Pneumatics(scraperPort, false))
         {}
@@ -34,16 +34,14 @@ namespace subsystems
             //load cubes
             if(master.get_digital(LOADCUBES))
             {
-                Intake1.move_velocity(550);
-                Intake2.move_velocity(550);
+                Intake.move_velocity(550);
                 Indexer.retract();
             }
 
             //score bottom goal
             else if(master.get_digital(SCOREL1))
             {
-                Intake1.move_velocity(-600);
-                Intake2.move_velocity(-600);
+                Intake.move_velocity(-600);
             }
 
             //score middle goal
@@ -51,24 +49,21 @@ namespace subsystems
             {
                 Outtakes.retract();
                 Indexer.extend();
-                Intake1.move_velocity(600);
-                Intake2.move_velocity(600);
+                Intake.move_velocity(600);
             }
 
             //score long goal
             else if(master.get_digital(SCOREL3))
             {
                 Indexer.extend();
-                Intake1.move_velocity(600);
-                Intake2.move_velocity(600);
+                Intake.move_velocity(600);
             }
 
             //if you aint pressing a macro that spins the intake motors,
             // brake them
             else
             {
-                Intake1.brake();
-                Intake2.brake();
+                Intake.brake();
             }
 
             //lower scraper
@@ -123,12 +118,5 @@ namespace subsystems
             // {
             //     Outtakes.retract();
             // }
-        };
-
-        void intake::startCode()
-        {
-            Scraper.retract();
-            Indexer.retract();
-            Outtakes.extend();
         };
 }
