@@ -45,15 +45,15 @@ lemlib::ControllerSettings lateral_controller(
 
 // angular PID controller
 lemlib::ControllerSettings angular_controller(
-	2, // proportional gain (kP)
+	2.2, // proportional gain (kP)
     0, // integral gain (kI)
-    10, // derivative gain (kD)
-    3, // anti windup
+    15, // derivative gain (kD)
+    0, // anti windup
     1, // small error range, in degrees
     100, // small error range timeout, in milliseconds
     3, // large error range, in degrees
     500, // large error range timeout, in milliseconds
-    0 // maximum acceleration (slew)
+    80 // maximum acceleration (slew)
 );
 
 // chassis constructor 
@@ -86,8 +86,14 @@ std::int32_t control_battery = 0;
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	//initialize brain screen
 	pros::lcd::initialize();
 	master.clear();
+
+	//calibrate sensors
+	imu.reset();
+	chassis.calibrate(true);
+	chassis.setPose(0, 0, 0);
 }
 
 /**
@@ -119,7 +125,10 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	chassis.setPose(0, 0, 0);
+	chassis.turnToHeading(90, 10000000, {.maxSpeed = 50});
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -156,21 +165,15 @@ void opcontrol() {
 		//and for whatever reason clearing the screen and delaying it by at least 15ms will let you do this fine
 
 		bot_battery = pros::battery::get_capacity();
-		master.print(0, 0, "b: %1.0lf", bot_battery);
+		master.print(0, 0, "t: %f", chassis.getPose().theta);
 		master.clear();
-		pros::delay(15);
+		pros::delay(20);
 		
-		// int intake_1_temp = intake_1.get_temperature();
-		// int intake_2_temp = intake_2.get_temperature();
-		// int intake_temps = (intake_1_temp + intake_2_temp) / 2;
-
-		// master.print(1, 0, "I: %d", intake_temps);
+		// master.print(1, 0, "hx: %f", chassis.getPose().x);
 		// master.clear();
-		// pros::delay(15);
-		
-		
+		// pros::delay(20);
 
-		// master.print(1, 0, "Left=%lf, Right=%lf", left_temps, right_temps);
+		// master.print(2, 0, "hy: %f", chassis.getPose().y);
 
 		pros::delay(20);                               // Run for 20 ms then update
 	}
