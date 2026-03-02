@@ -90,33 +90,56 @@ namespace subsystems
             {
                 Outtakes.retract();
             }
-
-            // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) 
-            // {
-            //     Intake1.move(100);
-            //     Intake2.move(100);
-            // }
-
-            // else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
-            // {
-            //     Intake1.move(-100);
-            //     Intake2.move(-100);
-            // }
-
-            // else
-            // {
-            //     Intake1.brake();
-            //     Intake2.brake();
-            // }
-
-            // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP))
-            // {
-            //     Outtakes.extend();
-            // }
-
-            // else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
-            // {
-            //     Outtakes.retract();
-            // }
         };
+
+        void intake::loadCubes()
+        {
+            Intake.move_velocity(550);
+            Indexer.retract();
+        };
+
+        void intake::scoreL1()
+        {
+            Intake.move_velocity(-600);
+        };
+
+        void intake::scoreL2()
+        {
+            Outtakes.retract();
+            Indexer.extend();
+            Intake.move_velocity(600);
+        };
+
+        void intake::scoreL3()
+        {
+            Indexer.extend();
+            Intake.move_velocity(600);
+        };
+
+        void intake::stopIntake()
+        {
+            Intake.brake();
+        };
+
+        void intake::scraperDown()
+        {
+            Outtakes.extend();
+            Scraper.extend();
+        };
+
+        void intake::scraperUp()
+        {
+            Scraper.retract();
+        };
+
+        void intake::raiseOuttake()
+        {
+            Outtakes.extend();
+        };
+
+        void intake::lowerOuttake()
+        {
+            Outtakes.retract();
+        };
+
 }

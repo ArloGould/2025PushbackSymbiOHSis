@@ -79,6 +79,21 @@ subsystems::intake intake = subsystems::intake(
 double bot_battery = 0;
 std::int32_t control_battery = 0;
 
+void right_auto() {
+	//right side auton
+
+	intake.Intake.move_velocity(600);
+	intake.Indexer.retract();
+
+	right_dt.move_velocity(300);
+	left_dt.move_velocity(300);
+
+	pros::delay(1000);
+
+	right_dt.brake();
+	right_dt.brake();
+}
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -125,7 +140,9 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	//right_auto();
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task

@@ -24,6 +24,18 @@ namespace subsystems
 
             void driveFunctions();
 
+            // auton functions, might make this a part of the drivercontrol
+            // functions
+            void loadCubes();
+            void scoreL1();
+            void scoreL2();
+            void scoreL3();
+            void stopIntake();
+            void scraperDown();
+            void scraperUp();
+            void raiseOuttake();
+            void lowerOuttake();
+
     };
     
 }
